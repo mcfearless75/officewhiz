@@ -50,7 +50,7 @@ with col_main:
         unsafe_allow_html=True,
     )
 with col_logo:
-    st.image("logo.jpg", width=100)
+    st.image("logo.png", width=100)
 
 # ——— Sidebar: Settings & Navigation ———
 with st.sidebar:
