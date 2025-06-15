@@ -5,16 +5,11 @@ from dotenv import load_dotenv
 
 # ——— Load API Key ———
 load_dotenv()  # expects OPENAI_API_KEY in .env
-API_KEY = os.getenv("OPENAI_API_KEY")
-if not API_KEY:
-    st.error("🔑 Please set your OPENAI_API_KEY in .env or Streamlit Secrets.")
-    st.stop()
-
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ——— Page Config ———
 st.set_page_config(
-    page_title="PRL Site Solutions OfficeWhiz",
+    page_title="OfficeWhiz AI Helper",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -26,30 +21,32 @@ st.markdown("""
   </style>
 """, unsafe_allow_html=True)
 
-# ——— Inject Branded CSS (UTF-8) ———
-if os.path.exists("styles.css"):
-    with open("styles.css", encoding="utf-8") as f:
-        css = f.read()
-    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+# ——— Base Dark Theme CSS ———
+st.markdown("""
+  <style>
+    body, .css-18e3th9, [data-testid="stAppViewContainer"] {
+      background-color: #1a1a1d !important;
+      color: #e0e0e0 !important;
+    }
+    [data-testid="stSidebar"] {
+      background-color: #202024 !important;
+      padding-top: 1rem !important;
+    }
+  </style>
+""", unsafe_allow_html=True)
 
-# ——— HEADER: Title & Logo Top-Right ———
-col_main, col_logo = st.columns([8, 1])
-with col_main:
+# ——— HEADER: Title + Logo Top-Right ———
+header_col, logo_col = st.columns([8,1])
+with header_col:
     st.markdown(
-        """
-        <h1 style='margin-bottom:0; font-size:2.8rem;'>
-          <span style='color:var(--prl-primary)'>PRL Site Solutions</span> OfficeWhiz
-        </h1>
-        <p style='margin-top:0.2rem; color:#ccc;'>
-          Your AI-powered Recruitment Specialist buddy
-        </p>
-        """,
+        "<h1 style='color:#00f0ff; margin-bottom:0;'>🧠 OfficeWhiz</h1>"
+        "<p style='margin-top:0; color:#ccc;'>Your AI-powered Office assistant</p>",
         unsafe_allow_html=True
     )
-with col_logo:
+with logo_col:
     st.image("logo.png", width=100)
 
-# ——— Sidebar: Settings & Navigation ———
+# ——— Sidebar: Accessibility Controls & Navigation ———
 with st.sidebar:
     st.markdown("### ⚙️ Settings")
     font_size = st.selectbox(
@@ -64,8 +61,7 @@ with st.sidebar:
     st.markdown("---")
     page = st.radio(
         "Navigation",
-        ["Search", "Chat", "Word", "Excel", "PowerPoint", "Outlook", "OneDrive", "Teams"],
-        index=0
+        ["Search", "Chat", "Word", "Excel", "PowerPoint", "Outlook", "OneDrive", "Teams"]
     )
 
 # ——— Apply Accessibility CSS ———
@@ -97,7 +93,7 @@ def ask_officewhiz(messages):
     )
     return resp.choices[0].message.content.strip()
 
-# ——— Conversation History State ———
+# ——— Initialize Conversation History ———
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -105,7 +101,7 @@ if "chat_history" not in st.session_state:
 if page == "Search":
     st.markdown("<div style='padding:3rem; text-align:center'>", unsafe_allow_html=True)
     st.markdown(
-        "<h2 style='color:var(--prl-primary); margin-bottom:0.5rem;'>"
+        "<h2 style='color:#fff; margin-bottom:0.5rem;'>"
         "👋 Hi there! How can I help with Office today?"
         "</h2>",
         unsafe_allow_html=True
@@ -117,20 +113,21 @@ if page == "Search":
         label_visibility="collapsed"
     )
     if query:
-        with st.spinner("Working…"):
-            answer = ask_officewhiz([
-                {"role":"system","content":"You are PRL Site Solutions’ AI Office assistant."},
-                {"role":"user","content":query}
+        with st.spinner("Thinking..."):
+            ans = ask_officewhiz([
+                {"role":"system","content":"You are a helpful assistant."},
+                {"role":"user","content":query},
             ])
         st.markdown(
-            f"<div class='main-container' style='margin-top:1rem;'>{answer}</div>",
+            f"<div style='background:#252529;border-radius:8px;padding:1rem;'>"
+            f"{ans}</div>",
             unsafe_allow_html=True
         )
     st.markdown("</div>", unsafe_allow_html=True)
 
-# ——— UNIVERSAL CHAT + QUICK GUIDES ———
+# ——— UNIVERSAL CHAT & QUICK GUIDES ———
 else:
-    # Quick Guide at top for OneDrive & Teams
+    # Quick Guides for OneDrive & Teams
     if page == "OneDrive":
         st.markdown("## 📘 OneDrive Quick Guide")
         st.markdown("""
@@ -151,20 +148,20 @@ else:
 - **Schedule**: Calendar → New meeting  
 """)
 
-    # Chat header
+    # Chat Header
     st.markdown(f"## 💬 Chat – {page}")
 
-    # Display chat history
+    # Conversation History
     for msg in st.session_state.chat_history:
         bg = "#33333a" if msg["role"] == "assistant" else "#2a2a2f"
         align = "left" if msg["role"] == "assistant" else "right"
         st.markdown(
-            f"<div style='background:{bg}; color:#e0e0e0; padding:0.8rem; margin-bottom:0.5rem;"
+            f"<div style='background:{bg}; padding:0.75rem; margin-bottom:0.5rem;"
             f"border-radius:8px; text-align:{align};'>{msg['content']}</div>",
             unsafe_allow_html=True
         )
 
-    # User input
+    # User Input
     user_input = st.text_input(
         "Your question…",
         placeholder="Type here…",
@@ -174,17 +171,17 @@ else:
     if st.button("Send"):
         if user_input:
             st.session_state.chat_history.append({"role":"user","content":user_input})
-            system_prompt = (
-                f"You are PRL Site Solutions’ OfficeWhiz for {page}. "
+            sys = (
+                f"You are OfficeWhiz, a friendly assistant for Microsoft {page} users. "
                 "Explain step-by-step and include a bonus tip."
             )
-            messages = [{"role":"system","content":system_prompt}] + st.session_state.chat_history
-            with st.spinner("Thinking…"):
-                reply = ask_officewhiz(messages)
+            msgs = [{"role":"system","content":sys}] + st.session_state.chat_history
+            with st.spinner("Thinking..."):
+                reply = ask_officewhiz(msgs)
             st.session_state.chat_history.append({"role":"assistant","content":reply})
             st.rerun()
 
-    # Clear chat
+    # Clear Chat
     if st.button("Clear Chat"):
         st.session_state.chat_history = []
         st.toast("Chat cleared!")

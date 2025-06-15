@@ -1,0 +1,162 @@
+/* styles.css */
+
+/* ----------------------------------
+   Global & Reset
+   ---------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Neon gradient – teal → magenta → electric purple */
+  background: linear-gradient(
+    135deg,
+    #00f0ff 0%,    /* neon cyan */
+    #00aaff 40%,   /* brighter cyan */
+    #ff00ff 70%,   /* neon magenta */
+    #9900ff 100%   /* electric purple */
+  );
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e0e8f0;
+}
+
+/* Container for page panels */
+.main-container {
+  background: rgba(20, 30, 40, 0.85);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ----------------------------------
+   Typography & Utility
+   ---------------------------------- */
+h1, h2, h3 {
+  margin-bottom: 1rem;
+  color: #00f0ff;  /* match the neon cyan accent */
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #e0e8f0;
+}
+
+/* ----------------------------------
+   Input + Icon
+   ---------------------------------- */
+.input-with-icon {
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon i {
+  margin-right: 0.5rem;
+  color: #00f0ff;
+  font-size: 1.1rem;
+}
+
+.input-with-icon input,
+.input-with-icon select {
+  flex: 1;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: #333;
+  color: #e0e8f0;
+}
+
+/* ----------------------------------
+   Button Styles
+   ---------------------------------- */
+.btn-primary,
+.btn-secondary,
+.site-nav a {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  padding: 0.6em 1.2em;
+  margin: 0.2em;
+  border: none;
+  border-radius: 0.5rem;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+/* Primary (Action) Button */
+.btn-primary {
+  background: linear-gradient(135deg, #00f0ff, #0072ff);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 114, 255, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0072ff, #00f0ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 114, 255, 0.5);
+}
+
+/* Secondary (Outline) Button */
+.btn-secondary {
+  background: transparent;
+  color: #00f0ff;
+  border: 2px solid #00f0ff;
+  box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 198, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 198, 255, 0.5);
+}
+
+/* Navigation Links as Buttons */
+.site-nav a {
+  background: #1a2533;
+  color: #e0e8f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.site-nav a:hover {
+  background: #293645;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Disabled State */
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.site-nav a.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ----------------------------------
+   Flashes
+   ---------------------------------- */
+.flashes {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+.flashes li {
+  background: #ff4d4f;
+  color: #fff;
+  padding: 0.6em 1em;
+  border-radius: 0.4rem;
+  margin-bottom: 0.5rem;
+}
