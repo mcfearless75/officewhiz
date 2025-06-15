@@ -50,7 +50,7 @@ with col_main:
         unsafe_allow_html=True,
     )
 with col_logo:
-    st.image("logo.png", width=100)
+    st.image("logo.jpg", width=100)
 
 # ——— Sidebar: Settings & Navigation ———
 with st.sidebar:
@@ -61,7 +61,8 @@ with st.sidebar:
         help="Adjust text size for readability",
     )
     dyslexia = st.checkbox(
-        "♿ Dyslexia-friendly font", help="Use OpenDyslexic for easier reading"
+        "♿ Dyslexia-friendly font",
+        help="Use OpenDyslexic for easier reading",
     )
     st.markdown("---")
     page = st.radio(
@@ -101,7 +102,6 @@ def ask_officewhiz(messages):
         max_tokens=600,
     )
     return resp.choices[0].message.content.strip()
-
 
 # ——— Initialize Chat History ———
 if "chat_history" not in st.session_state:
